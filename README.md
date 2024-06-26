@@ -1,5 +1,7 @@
 # OpenLens Node/Pod Menu Extension
 
+This repository is a fork of [openlens-node-pod-menu](https://github.com/alebcay/openlens-node-pod-menu).
+
 This OpenLens extension adds back the node and pod menu functionality that was removed from OpenLens itself in 6.3.0.
 
 # Installing this extension
