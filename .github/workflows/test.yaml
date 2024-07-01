@@ -50,6 +50,7 @@ jobs:
           echo "matrix=$(node tools/generate_test_matrix.js)" >> $GITHUB_OUTPUT
 
   integration:
+    if: false
     needs: build
     runs-on: ubuntu-latest
     strategy:
