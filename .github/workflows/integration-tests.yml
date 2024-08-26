@@ -57,20 +57,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install minikube (Linux)
-        if: runner.os == 'Linux'
-        uses: medyagh/setup-minikube@master
-        with:
-          kubernetes-version: v1.30.1
-
-      - name: Install dependencies for plugin
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          retry_on: error
-          command: npm ci
-
       - name: Install dependencies for app
         uses: nick-fields/retry@v3
         with:
@@ -78,6 +64,14 @@ jobs:
           max_attempts: 3
           retry_on: error
           command: cd ../freelens && npm ci
+
+      - name: Install dependencies for plugin
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: npm ci
 
       - name: Build plugin
         run: npm run build
@@ -92,14 +86,18 @@ jobs:
       - name: Copy tests from plugin to app
         run: cp integration/__tests__/extensions.tests.ts ../freelens/freelens/integration/__tests__
 
+      - name: Install minikube
+        uses: medyagh/setup-minikube@master
+        with:
+          kubernetes-version: v1.30.1
+
       - name: Build app
         run: cd ../freelens && npm run build
 
       - name: Build Electron app
         run: cd ../freelens && npm run build:app -- -- -- dir --${{ matrix.arch }}
 
-      - name: Run integration tests (Linux)
-        if: runner.os == 'Linux'
+      - name: Run integration tests
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 15
