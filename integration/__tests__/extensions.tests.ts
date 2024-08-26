@@ -39,7 +39,7 @@ describe("extensions page tests", () => {
 
     // Expect extension to be listed in installed list and enabled
     const installedExtensionName = await (await window.waitForSelector('div[class*="installed-extensions-module__extensionName--"]')).textContent();
-    expect(installedExtensionName).toBe("@alebcay/openlens-node-pod-menu");
+    expect(installedExtensionName).toBe("@freelensapp/freelens-node-pod-menu");
     const installedExtensionState = await (await window.waitForSelector('div[class*="installed-extensions-module__enabled--"]')).textContent();
     expect(installedExtensionState).toBe("Enabled");
     await window.click('div[class*="close-button-module__closeButton--"][aria-label=Close]');
