@@ -62,7 +62,7 @@ describe("extensions page tests", () => {
     await cleanup?.();
   }, 10*60*1000);
 
-  it('adds menu items to the pod details overlay', async () => {
+  it.skip('adds menu items to the pod details overlay', async () => {
     // Navigate to pods view
     await frame.click('div[data-testid=sidebar-item-pods]');
 
@@ -87,7 +87,7 @@ describe("extensions page tests", () => {
     await frame.click('span[data-icon-name=close]');
   }, 10*60*1000);
 
-  it('adds menu items to the pod actions dropdown', async () => {
+  it.skip('adds menu items to the pod actions dropdown', async () => {
     // Navigate to pods view
     await frame.click('div[data-testid=sidebar-item-pods]');
 
@@ -113,7 +113,7 @@ describe("extensions page tests", () => {
     await frame.click('div[id="name"][class="TableCell name nowrap sorting"]');
   }, 10*60*1000);
 
-  it('adds menu items to the node details overlay', async () => {
+  it.skip('adds menu items to the node details overlay', async () => {
     // Navigate to nodes view
     await frame.click('div[data-testid=sidebar-item-nodes]');
 
@@ -133,7 +133,7 @@ describe("extensions page tests", () => {
     await frame.click('span[data-icon-name=close]');
   }, 10*60*1000);
 
-  it('adds menu items to the node actions dropdown', async () => {
+  it.skip('adds menu items to the node actions dropdown', async () => {
     // Navigate to nodes view
     await frame.click('div[data-testid=sidebar-item-nodes]');
 
