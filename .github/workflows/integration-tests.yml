@@ -79,6 +79,9 @@ jobs:
           retry_on: error
           command: cd ../freelens && npm ci
 
+      - name: Build plugin
+        run: npm run build
+
       - name: Pack plugin
         run: npm pack
 
@@ -87,7 +90,7 @@ jobs:
         run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
 
       - name: Copy tests from plugin to app
-        run: cp integration/__tests__/* ../freelens/freelens/integration/__tests__
+        run: cp integration/__tests__/extensions.tests.ts ../freelens/freelens/integration/__tests__
 
       - name: Build app
         run: cd ../freelens && npm run build
@@ -102,4 +105,4 @@ jobs:
           timeout_minutes: 15
           max_attempts: 3
           retry_on: timeout
-          command: cd ../freelens && xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm run test:integration
+          command: cd ../freelens/freelens && xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npx jest --forceExit -- integration/__tests__/extensions.tests.ts
