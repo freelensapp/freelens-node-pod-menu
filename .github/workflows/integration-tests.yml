@@ -73,6 +73,9 @@ jobs:
           retry_on: error
           command: npm ci
 
+      - name: Build app
+        run: cd ../freelens && npm run build
+
       - name: Build plugin
         run: npm run build
 
@@ -90,9 +93,6 @@ jobs:
         uses: medyagh/setup-minikube@master
         with:
           kubernetes-version: v1.30.1
-
-      - name: Build app
-        run: cd ../freelens && npm run build
 
       - name: Build Electron app
         run: cd ../freelens && npm run build:app -- -- -- dir --${{ matrix.arch }}
