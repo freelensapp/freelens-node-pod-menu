@@ -6,7 +6,7 @@
 
 
 import React from "react";
-import { Renderer, Common } from "@k8slens/extensions";
+import { Renderer, Common } from "@freelensapp/extensions";
 
 type Pod = Renderer.K8sApi.Pod;
 
