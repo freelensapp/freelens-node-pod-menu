@@ -34,7 +34,7 @@ jobs:
         with:
           repository: dex4er/freelens
           ref: feature/rebranding
-          path: freelens
+          path: ../freelens
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -73,19 +73,19 @@ jobs:
           timeout_minutes: 20
           max_attempts: 3
           retry_on: error
-          command: cd freelens && npm ci
+          command: cd ../freelens && npm ci
 
       - name: Pack plugin
         run: npm pack
 
       - name: Copy tests from plugin to app
-        run: cp integration/__tests__/* freelens/freelens/integration/__tests__
+        run: cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
       - name: Build app
-        run: cd freelens && npm run build
+        run: cd ../freelens && npm run build
 
       - name: Build Electron app
-        run: cd freelens && npm run build:app -- -- -- dir --${{ matrix.arch }}
+        run: cd ../freelens && npm run build:app -- -- -- dir --${{ matrix.arch }}
 
       - name: Run integration tests (Linux)
         if: runner.os == 'Linux'
@@ -94,4 +94,4 @@ jobs:
           timeout_minutes: 15
           max_attempts: 3
           retry_on: timeout
-          command: xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm run test:integration
+          command: cd ../freelens && xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm run test:integration
