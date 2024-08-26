@@ -3,7 +3,7 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-import { Renderer } from "@k8slens/extensions";
+import { Renderer } from "@freelensapp/extensions";
 import { NodeMenu } from "./src/node-menu";
 import { PodAttachMenu } from "./src/attach-menu";
 import { PodShellMenu } from "./src/shell-menu";

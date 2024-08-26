@@ -6,3 +6,4 @@ coverage/
 tmp/
 locales/**/**.js
 lens.log
+*.tgz
