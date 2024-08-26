@@ -34,7 +34,11 @@ jobs:
         with:
           repository: dex4er/freelens
           ref: feature/rebranding
-          path: ../freelens
+          path: freelens
+
+      - name: Move app to upper directory
+        shell: bash
+        run: mv freelens ..
 
       - name: Setup node
         uses: actions/setup-node@v4
