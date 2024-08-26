@@ -82,6 +82,10 @@ jobs:
       - name: Pack plugin
         run: npm pack
 
+      - name: Get extension path
+        shell: bash
+        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
+
       - name: Copy tests from plugin to app
         run: cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
