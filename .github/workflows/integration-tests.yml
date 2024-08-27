@@ -36,10 +36,6 @@ jobs:
           ref: feature/rebranding
           path: freelens
 
-      - name: Move app to upper directory
-        shell: bash
-        run: mv freelens ..
-
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -53,9 +49,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.npm_cache_dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '../**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Move app to upper directory
+        shell: bash
+        run: mv freelens ..
 
       - name: Install dependencies for app
         uses: nick-fields/retry@v3
