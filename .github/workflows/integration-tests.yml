@@ -71,7 +71,7 @@ jobs:
           timeout_minutes: 5
           max_attempts: 3
           retry_on: error
-          command: npm ci
+          command: yq -oj -pj '.devDependencies["@freelensapp/extensions"]="../freelens/packages/extension-api"' package.json && npm ci
 
       - name: Build app
         run: cd ../freelens && npm run build
@@ -87,7 +87,7 @@ jobs:
         run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
 
       - name: Copy tests from plugin to app
-        run: cp integration/__tests__/extensions.tests.ts ../freelens/freelens/integration/__tests__
+        run: rm -f ../freelens/freelens/integration/__tests__/* && cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
       - name: Install minikube
         uses: medyagh/setup-minikube@master
@@ -103,4 +103,4 @@ jobs:
           timeout_minutes: 15
           max_attempts: 3
           retry_on: timeout
-          command: cd ../freelens/freelens && xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npx jest --forceExit -- integration/__tests__/extensions.tests.ts
+          command: cd ../freelens && npm run test:integration
