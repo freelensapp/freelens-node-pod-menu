@@ -22,6 +22,7 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x64
+            ref: feature/rebranding
 
     runs-on: ${{ matrix.os }}
 
@@ -33,7 +34,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: dex4er/freelens
-          ref: feature/rebranding
+          ref: ${{ matrix.ref }}
           path: freelens
 
       - name: Setup node
