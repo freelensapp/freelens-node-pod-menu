@@ -24,13 +24,19 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout
+      - name: Checkout plugin
         uses: actions/checkout@v4
 
-      - name: Setup node
-        uses: actions/setup-node@v4
+      - name: Checkout app
+        uses: actions/checkout@v4
         with:
-          node-version-file: .nvmrc
+          repository: dex4er/freelens
+          ref: feature/rebranding
+          path: freelens
+
+      - name: Move app to upper directory
+        shell: bash
+        run: mv freelens ..
 
       - name: Get npm cache directory
         run: echo "npm_cache_dir=$(npm config get cache)" >> ${GITHUB_ENV}
@@ -39,17 +45,25 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.npm_cache_dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '../**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies
+      - name: Install dependencies for app
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 20
           max_attempts: 3
           retry_on: error
-          command: npm ci
+          command: cd ../freelens && npm ci
+
+      - name: Install dependencies for plugin
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: yq -oj -pj '.devDependencies["@freelensapp/extensions"]="../freelens/packages/extension-api"' package.json && npm ci
 
       - name: Lint
         run: npm run lint
