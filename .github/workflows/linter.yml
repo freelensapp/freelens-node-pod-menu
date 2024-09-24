@@ -21,7 +21,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            ref: feature/rebranding
+            ref: main
 
     runs-on: ${{ matrix.os }}
 

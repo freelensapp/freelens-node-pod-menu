@@ -22,7 +22,7 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x64
-            ref: feature/rebranding
+            ref: main
 
     runs-on: ${{ matrix.os }}
 
