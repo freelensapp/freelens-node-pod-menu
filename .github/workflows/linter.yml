@@ -32,7 +32,7 @@ jobs:
       - name: Checkout app
         uses: actions/checkout@v4
         with:
-          repository: dex4er/freelens
+          repository: freelensapp/freelens
           ref: ${{ matrix.ref }}
           path: freelens
 
