@@ -1,20 +1,17 @@
-name: Linter
+name: Release
 
 on:
   push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: {}
+    tags:
+      - v*
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 jobs:
-  linter:
-    name: linter on ${{ matrix.os }}
+  release:
+    name: release on ${{ matrix.os }}
 
     strategy:
       fail-fast: false
@@ -28,6 +25,9 @@ jobs:
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
+
+      - name: Check if package version matches
+        run: test "${GITHUB_REF_NAME}" = "v$(jq -r .version package.json)"
 
       - name: Checkout app
         uses: actions/checkout@v4
@@ -72,5 +72,20 @@ jobs:
           retry_on: error
           command: yq -oj -pj '.devDependencies["@freelensapp/extensions"]="../freelens/packages/extension-api"' package.json && npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Build app
+        run: cd ../freelens && npm run build
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Publish plugin
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          fail_on_unmatched_files: true
+          files: |
+            *.tgz
