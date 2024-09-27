@@ -12,6 +12,14 @@
     "node": ">= 16.14.2",
     "freelens": "^0.1.0"
   },
+  "author": {
+    "name": "Freelens Authors",
+    "email": "freelens@freelens.app"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "build": "npm run clean && npx webpack",
     "clean": "rm -rf ./dist",
