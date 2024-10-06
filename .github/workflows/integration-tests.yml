@@ -58,15 +58,22 @@ jobs:
         shell: bash
         run: echo "freelens_version=$(npm list @freelensapp/extensions --json | jq -r '.dependencies["@freelensapp/extensions"].version')" >> ${GITHUB_ENV}
 
+      - name: Build plugin
+        run: npm run build
+
+      - name: Pack plugin
+        run: npm pack
+
+      - name: Get extension path
+        shell: bash
+        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
+
       - name: Checkout app
         uses: actions/checkout@v4
         with:
           repository: freelensapp/freelens
           ref: v${{ env.freelens_version }}
           path: freelens
-
-      - name: Build app
-        run: cd ../freelens && npm run build
 
       - name: Move app to upper directory
         shell: bash
@@ -80,15 +87,8 @@ jobs:
           retry_on: error
           command: cd ../freelens && npm ci
 
-      - name: Build plugin
-        run: npm run build
-
-      - name: Pack plugin
-        run: npm pack
-
-      - name: Get extension path
-        shell: bash
-        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
+      - name: Build app
+        run: cd ../freelens && npm run build
 
       - name: Copy tests from plugin to app
         run: |
