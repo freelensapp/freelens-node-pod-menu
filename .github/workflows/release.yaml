@@ -56,10 +56,20 @@ jobs:
       - name: Build plugin
         run: npm run build
 
-      - name: Publish plugin
-        run: npm publish --access public
+      - name: Publish NPM packages
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          retry_on: error
+          command: |
+            case "${GITHUB_REF_NAME}" in
+              *-*) dist_tag=next;;
+              *) dist_tag=latest;;
+            esac
+            npm publish --tag ${dist_tag}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release
         uses: softprops/action-gh-release@v2
