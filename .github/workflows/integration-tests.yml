@@ -22,20 +22,12 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x64
-            ref: main
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
-
-      - name: Checkout app
-        uses: actions/checkout@v4
-        with:
-          repository: freelensapp/freelens
-          ref: ${{ matrix.ref }}
-          path: freelens
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -54,6 +46,28 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install dependencies for plugin
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: npm ci
+
+      - name: Get Freelens version
+        shell: bash
+        run: echo "freelens_version=$(npm list @freelensapp/extensions --json | jq -r '.dependencies["@freelensapp/extensions"].version')" >> ${GITHUB_ENV}
+
+      - name: Checkout app
+        uses: actions/checkout@v4
+        with:
+          repository: freelensapp/freelens
+          ref: v${{ env.freelens_version }}
+          path: freelens
+
+      - name: Build app
+        run: cd ../freelens && npm run build
+
       - name: Move app to upper directory
         shell: bash
         run: mv freelens ..
@@ -66,17 +80,6 @@ jobs:
           retry_on: error
           command: cd ../freelens && npm ci
 
-      - name: Install dependencies for plugin
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          retry_on: error
-          command: yq -oj -pj '.devDependencies["@freelensapp/extensions"]="../freelens/packages/extension-api"' package.json && npm ci
-
-      - name: Build app
-        run: cd ../freelens && npm run build
-
       - name: Build plugin
         run: npm run build
 
@@ -88,7 +91,9 @@ jobs:
         run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
 
       - name: Copy tests from plugin to app
-        run: rm -f ../freelens/freelens/integration/__tests__/* && cp integration/__tests__/* ../freelens/freelens/integration/__tests__
+        run: |
+          rm -f ../freelens/freelens/integration/__tests__/*
+          cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
       - name: Install minikube
         uses: medyagh/setup-minikube@master

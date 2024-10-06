@@ -29,13 +29,6 @@ jobs:
       - name: Check if package version matches
         run: test "${GITHUB_REF_NAME}" = "v$(jq -r .version package.json)"
 
-      - name: Checkout app
-        uses: actions/checkout@v4
-        with:
-          repository: freelensapp/freelens
-          ref: ${{ matrix.ref }}
-          path: freelens
-
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -52,28 +45,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Move app to upper directory
-        shell: bash
-        run: mv freelens ..
-
-      - name: Install dependencies for app
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          retry_on: error
-          command: cd ../freelens && npm ci
-
       - name: Install dependencies for plugin
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 3
           retry_on: error
-          command: yq -oj -pj '.devDependencies["@freelensapp/extensions"]="../freelens/packages/extension-api"' package.json && npm ci
-
-      - name: Build app
-        run: cd ../freelens && npm run build
+          command: npm ci
 
       - name: Build plugin
         run: npm run build
