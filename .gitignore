@@ -5,21 +5,18 @@
 *.map
 *.out
 *.tgz
-*~
 
-tmp/
-coverage/
-dist/
-node_modules/
-out/
+/dist/
 
-.yalc/
+/coverage/
+/node_modules/
+/out/
 
-.DS_Store/
-.idea/
-.vscode/
+/.nyc_output/
 
-docs/extensions/api
-site/
+/package-lock.json
+/yarn.lock
 
-.linkable.json
+.DS_Store
+/.idea
+/.vscode
