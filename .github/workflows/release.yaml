@@ -1,20 +1,17 @@
-name: Linter
+name: Release
 
 on:
   push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch: {}
+    tags:
+      - v*
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
 
 jobs:
-  linter:
-    name: linter on ${{ matrix.os }}
+  release:
+    name: release on ${{ matrix.os }}
 
     strategy:
       fail-fast: false
@@ -28,6 +25,9 @@ jobs:
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
+
+      - name: Check if package version matches
+        run: test "${GITHUB_REF_NAME}" = "v$(jq -r .version package.json)"
 
       - name: Setup node
         uses: actions/setup-node@v4
@@ -53,5 +53,27 @@ jobs:
           retry_on: error
           command: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Build plugin
+        run: npm run build
+
+      - name: Publish NPM packages
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          retry_on: error
+          command: |
+            case "${GITHUB_REF_NAME}" in
+              *-*) dist_tag=next;;
+              *) dist_tag=latest;;
+            esac
+            npm publish --tag ${dist_tag}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          fail_on_unmatched_files: true
+          files: |
+            *.tgz
