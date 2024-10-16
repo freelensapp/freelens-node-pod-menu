@@ -37,14 +37,8 @@ describe("extensions page tests", () => {
     console.log('await textbox.fill');
     await textbox.fill(process.env.EXTENSION_PATH || "@freelensapp/freelens-node-pod-menu");
     const install_button_selector = 'button[class*="Button install-module__button--"]';
-    console.log('await window.waitForSelector [data-waiting=false]');
-    await window.waitForSelector(install_button_selector.concat('[data-waiting=false]'));
     console.log('await window.click [data-waiting=false]');
     await window.click(install_button_selector.concat('[data-waiting=false]'));
-    console.log('await window.waitForSelector [data-waiting=true]');
-    await window.waitForSelector(install_button_selector.concat('[data-waiting=true]'));
-    console.log('await window.waitForSelector [data-waiting=false]');
-    await window.waitForSelector(install_button_selector.concat('[data-waiting=false]'));
 
     // Expect extension to be listed in installed list and enabled
     console.log('await window.waitForSelector div[class*="installed-extensions-module__extensionName--"]');
@@ -52,10 +46,10 @@ describe("extensions page tests", () => {
     expect(installedExtensionName).toBe("@freelensapp/freelens-node-pod-menu");
     const installedExtensionState = await (await window.waitForSelector('div[class*="installed-extensions-module__enabled--"]')).textContent();
     expect(installedExtensionState).toBe("Enabled");
-    console.log('await window.click i[data-testid^="close-notification-for-notification_"]');
-    await window.click('i[data-testid^="close-notification-for-notification_"]');
-    console.log('await window.click div[class^=[close-button-module__closeButton--"][aria-label="Close"]');
-    await window.click('div[class^="close-button-module__closeButton--"][aria-label="Close"]');
+    console.log('await window.click i[data-testid*="close-notification-for-notification_"]');
+    await window.click('i[data-testid*="close-notification-for-notification_"]');
+    console.log('await window.click div[class*=[close-button-module__closeButton--"][aria-label="Close"]');
+    await window.click('div[class*="close-button-module__closeButton--"][aria-label="Close"]');
 
     // Navigate to catalog
     await window.waitForSelector('div[data-rbd-draggable-id=catalog-entity]');
