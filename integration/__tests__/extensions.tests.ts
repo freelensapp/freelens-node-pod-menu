@@ -30,7 +30,7 @@ describe("extensions page tests", () => {
 
     // Trigger extension install
     const textbox = window.getByPlaceholder("Name or file path or URL");
-    await textbox.fill(process.env.EXTENSION_PATH);
+    await textbox.fill(process.env.EXTENSION_PATH || "@freelensapp/freelens-node-pod-menu");
     const install_button_selector = 'button[class*="Button install-module__button--"]';
     await window.waitForSelector(install_button_selector.concat('[data-waiting=false]'));
     await window.click(install_button_selector.concat('[data-waiting=false]'));
@@ -49,7 +49,7 @@ describe("extensions page tests", () => {
     await window.click('div[data-rbd-draggable-id=catalog-entity]');
 
     // Navigate to minikube cluster
-    frame = await utils.lauchMinikubeClusterFromCatalog(window);
+    frame = await utils.launchMinikubeClusterFromCatalog(window);
 
     // Expand workloads menu if not already expanded
     await frame.waitForSelector('div[data-testid=sidebar-item-workloads]');
@@ -62,29 +62,8 @@ describe("extensions page tests", () => {
     await cleanup?.();
   }, 10*60*1000);
 
-  it.skip('adds menu items to the pod details overlay', async () => {
-    // Navigate to pods view
-    await frame.click('div[data-testid=sidebar-item-pods]');
-
-    // Navigate to kube-system namespace
-    await frame.click('div[data-testid=namespace-select-filter]');
-    await frame.waitForSelector('.NamespaceSelectFilterMenu');
-    await frame.click('.Select__option >> text=kube-system');
-
-    // Click on etcd-minikube pod
-    await frame.waitForSelector('text=etcd-minikube');
-    await frame.click('text=etcd-minikube');
-
-    // Wait for pod details to pop out
-    await frame.waitForSelector('span[data-icon-name=close]');
-
-    // Check for expected menu items
-    expect(await frame.locator('li[class="MenuItem"] span[class="title"] >> text="Attach Pod"').count()).toBe(1);
-    expect(await frame.locator('li[class="MenuItem"] span[class="title"] >> text="Shell"').count()).toBe(1);
-    expect(await frame.locator('li[class="MenuItem"] span[class="title"] >> text="Logs"').count()).toBe(1);
-
-    // Close pod details
-    await frame.click('span[data-icon-name=close]');
+  it('installs an extension', async () => {
+    // Nothing, as only beforeAll is called
   }, 10*60*1000);
 
   it.skip('adds menu items to the pod actions dropdown', async () => {
