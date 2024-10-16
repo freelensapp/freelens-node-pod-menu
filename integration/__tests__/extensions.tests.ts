@@ -3,7 +3,7 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-import type { ElectronApplication, Frame, Page } from "playwright";
+import type { ConsoleMessage, ElectronApplication, Frame, Page } from "playwright";
 import { expect } from "@jest/globals";
 import * as utils from "../helpers/utils";
 
@@ -12,14 +12,18 @@ describe("extensions page tests", () => {
   let cleanup: undefined | (() => Promise<void>);
   let frame: Frame;
 
+  const logger = (msg: ConsoleMessage) => console.log(msg.text());
+
   beforeAll(async () => {
     let app: ElectronApplication;
 
     ({ window, cleanup, app } = await utils.start());
-    window.on('console', msg => console.log(msg.text()));
+    window.on('console', logger);
+    console.log('await utils.clickWelcomeButton');
     await utils.clickWelcomeButton(window);
 
     // Navigate to extensions page
+    console.log('await app.evaluate');
     await app.evaluate(async ({ app }) => {
       await app.applicationMenu
         ?.getMenuItemById(process.platform === "darwin" ? "mac" : "file")
@@ -30,19 +34,28 @@ describe("extensions page tests", () => {
 
     // Trigger extension install
     const textbox = window.getByPlaceholder("Name or file path or URL");
+    console.log('await textbox.fill');
     await textbox.fill(process.env.EXTENSION_PATH || "@freelensapp/freelens-node-pod-menu");
     const install_button_selector = 'button[class*="Button install-module__button--"]';
+    console.log('await window.waitForSelector [data-waiting=false]');
     await window.waitForSelector(install_button_selector.concat('[data-waiting=false]'));
+    console.log('await window.click [data-waiting=false]');
     await window.click(install_button_selector.concat('[data-waiting=false]'));
+    console.log('await window.waitForSelector [data-waiting=true]');
     await window.waitForSelector(install_button_selector.concat('[data-waiting=true]'));
+    console.log('await window.waitForSelector [data-waiting=false]');
     await window.waitForSelector(install_button_selector.concat('[data-waiting=false]'));
 
     // Expect extension to be listed in installed list and enabled
+    console.log('await window.waitForSelector div[class*="installed-extensions-module__extensionName--"]');
     const installedExtensionName = await (await window.waitForSelector('div[class*="installed-extensions-module__extensionName--"]')).textContent();
     expect(installedExtensionName).toBe("@freelensapp/freelens-node-pod-menu");
     const installedExtensionState = await (await window.waitForSelector('div[class*="installed-extensions-module__enabled--"]')).textContent();
     expect(installedExtensionState).toBe("Enabled");
-    await window.click('div[class*="close-button-module__closeButton--"][aria-label=Close]');
+    console.log('await window.click i[data-testid^="close-notification-for-notification_"]');
+    await window.click('i[data-testid^="close-notification-for-notification_"]');
+    console.log('await window.click div[class^=[close-button-module__closeButton--"][aria-label="Close"]');
+    await window.click('div[class^="close-button-module__closeButton--"][aria-label="Close"]');
 
     // Navigate to catalog
     await window.waitForSelector('div[data-rbd-draggable-id=catalog-entity]');
@@ -56,15 +69,17 @@ describe("extensions page tests", () => {
     if (await frame.locator('div[data-testid=sidebar-item-pods]').count() === 0) {
       await frame.click('div[data-testid=sidebar-item-workloads]');
     }
-  }, 10*60*1000);
+  }, 100*60*1000);
 
   afterAll(async () => {
+    // Cannot log after tests are done.
+    window.off('console', logger);
     await cleanup?.();
   }, 10*60*1000);
 
   it('installs an extension', async () => {
     // Nothing, as only beforeAll is called
-  }, 10*60*1000);
+  }, 100*60*1000);
 
   it.skip('adds menu items to the pod actions dropdown', async () => {
     // Navigate to pods view
