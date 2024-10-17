@@ -101,7 +101,7 @@ describe("extensions page tests", () => {
     await frame.click('div[id="name"][class="TableCell name nowrap sorting"]');
   }, 10*60*1000);
 
-  it.skip('adds menu items to the node details overlay', async () => {
+  it('adds menu items to the node details overlay', async () => {
     // Navigate to nodes view
     await frame.click('div[data-testid=sidebar-item-nodes]');
 
@@ -121,7 +121,7 @@ describe("extensions page tests", () => {
     await frame.click('span[data-icon-name=close]');
   }, 10*60*1000);
 
-  it.skip('adds menu items to the node actions dropdown', async () => {
+  it('adds menu items to the node actions dropdown', async () => {
     // Navigate to nodes view
     await frame.click('div[data-testid=sidebar-item-nodes]');
 
