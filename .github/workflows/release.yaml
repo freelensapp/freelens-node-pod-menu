@@ -69,7 +69,8 @@ jobs:
               *-*) dist_tag=next;;
               *) dist_tag=latest;;
             esac
-            npm publish --access public --tag ${dist_tag}
+            npm pack
+            npm publish --access public --tag ${dist_tag} *.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
