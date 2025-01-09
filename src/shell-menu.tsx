@@ -3,8 +3,6 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-
-
 import React from "react";
 import { Renderer, Common } from "@freelensapp/extensions";
 
@@ -21,12 +19,11 @@ const {
   },
   Navigation,
 } = Renderer;
-const {
-  Util,
-  App,
-} = Common;
+const { Util, App } = Common;
 
-export class PodShellMenu extends React.Component<Renderer.Component.KubeObjectMenuProps<Pod>> {
+export class PodShellMenu extends React.Component<
+  Renderer.Component.KubeObjectMenuProps<Pod>
+> {
   async execShell(container?: string) {
     const { object: pod } = this.props;
 
@@ -36,7 +33,8 @@ export class PodShellMenu extends React.Component<Renderer.Component.KubeObjectM
       "exec",
       "-i",
       "-t",
-      "-n", pod.getNs(),
+      "-n",
+      pod.getNs(),
       pod.getName(),
     ];
 
@@ -75,7 +73,9 @@ export class PodShellMenu extends React.Component<Renderer.Component.KubeObjectM
     if (!containers.length) return null;
 
     return (
-      <MenuItem onClick={Util.prevDefault(() => this.execShell(containers[0].name))}>
+      <MenuItem
+        onClick={Util.prevDefault(() => this.execShell(containers[0].name))}
+      >
         <Icon
           svg="ssh"
           interactive={toolbar}
@@ -84,24 +84,22 @@ export class PodShellMenu extends React.Component<Renderer.Component.KubeObjectM
         <span className="title">Shell</span>
         {containers.length > 1 && (
           <>
-            <Icon className="arrow" material="keyboard_arrow_right"/>
+            <Icon className="arrow" material="keyboard_arrow_right" />
             <SubMenu>
-              {
-                containers.map(container => {
-                  const { name } = container;
+              {containers.map((container) => {
+                const { name } = container;
 
-                  return (
-                    <MenuItem
-                      key={name}
-                      onClick={Util.prevDefault(() => this.execShell(name))}
-                      className="flex align-center"
-                    >
-                      <StatusBrick/>
-                      <span>{name}</span>
-                    </MenuItem>
-                  );
-                })
-              }
+                return (
+                  <MenuItem
+                    key={name}
+                    onClick={Util.prevDefault(() => this.execShell(name))}
+                    className="flex align-center"
+                  >
+                    <StatusBrick />
+                    <span>{name}</span>
+                  </MenuItem>
+                );
+              })}
             </SubMenu>
           </>
         )}

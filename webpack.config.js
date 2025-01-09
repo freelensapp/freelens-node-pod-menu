@@ -25,14 +25,14 @@ module.exports = [
     externals: [
       {
         "@freelensapp/extensions": "var global.LensExtensions",
-        "react": "var global.React",
+        react: "var global.React",
         "react-dom": "var global.ReactDOM",
-        "mobx": "var global.Mobx",
+        mobx: "var global.Mobx",
         "mobx-react": "var global.MobxReact",
       },
     ],
     resolve: {
-      extensions: [ ".tsx", ".ts", ".js" ],
+      extensions: [".tsx", ".ts", ".js"],
     },
     output: {
       libraryTarget: "commonjs2",

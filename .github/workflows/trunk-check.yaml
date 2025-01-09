@@ -1,4 +1,4 @@
-name: Linter
+name: Trunk Check
 
 on:
   push:
@@ -13,20 +13,13 @@ permissions:
   contents: read
 
 jobs:
-  linter:
-    name: linter on ${{ matrix.os }}
+  trunk:
+    name: Trunk Check
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            ref: main
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
 
     steps:
-      - name: Checkout plugin
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup node
@@ -53,5 +46,7 @@ jobs:
           retry_on: error
           command: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: all

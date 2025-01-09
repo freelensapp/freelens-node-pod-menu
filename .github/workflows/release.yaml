@@ -17,10 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-20.04
             ref: main
 
     runs-on: ${{ matrix.os }}
+    environment: publishing
 
     steps:
       - name: Checkout plugin
