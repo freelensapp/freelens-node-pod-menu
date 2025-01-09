@@ -10,7 +10,7 @@ on:
     paths:
       - .trunk/**
   schedule:
-    - cron: 38 4 * * *
+    - cron: 11 5 * * *
   workflow_dispatch: {}
 
 permissions:
@@ -21,7 +21,7 @@ jobs:
   trunk-upgrade:
     name: trunk upgrade
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-20.04
     environment: automated
 
     if: >-
@@ -31,6 +31,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Get npm cache directory
+        run: echo "npm_cache_dir=$(npm config get cache)" >> ${GITHUB_ENV}
+
+      - name: Use cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.npm_cache_dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies for plugin
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: npm ci
 
       - name: Set up Trunk
         run: curl https://get.trunk.io -fsSL | bash -s -- -y
