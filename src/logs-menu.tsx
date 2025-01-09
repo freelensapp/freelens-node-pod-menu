@@ -10,20 +10,14 @@ type Pod = Renderer.K8sApi.Pod;
 type IPodContainer = Renderer.K8sApi.IPodContainer;
 
 const {
-  Component: {
-    logTabStore,
-    MenuItem,
-    Icon,
-    SubMenu,
-    StatusBrick,
-  },
+  Component: { logTabStore, MenuItem, Icon, SubMenu, StatusBrick },
   Navigation,
 } = Renderer;
-const {
-  Util,
-} = Common;
+const { Util } = Common;
 
-export class PodLogsMenu extends React.Component<Renderer.Component.KubeObjectMenuProps<Pod>> {
+export class PodLogsMenu extends React.Component<
+  Renderer.Component.KubeObjectMenuProps<Pod>
+> {
   showLogs(container: IPodContainer) {
     Navigation.hideDetails();
     const pod = this.props.object;
@@ -51,30 +45,30 @@ export class PodLogsMenu extends React.Component<Renderer.Component.KubeObjectMe
         <span className="title">Logs</span>
         {containers.length > 1 && (
           <>
-            <Icon className="arrow" material="keyboard_arrow_right"/>
+            <Icon className="arrow" material="keyboard_arrow_right" />
             <SubMenu>
-              {
-                containers.map(container => {
-                  const { name } = container;
-                  const status = statuses.find(status => status.name === name);
-                  const brick = status ? (
-                    <StatusBrick
-                      className={Util.cssNames(Object.keys(status.state)[0], { ready: status.ready })}
-                    />
-                  ) : null;
+              {containers.map((container) => {
+                const { name } = container;
+                const status = statuses.find((status) => status.name === name);
+                const brick = status ? (
+                  <StatusBrick
+                    className={Util.cssNames(Object.keys(status.state)[0], {
+                      ready: status.ready,
+                    })}
+                  />
+                ) : null;
 
-                  return (
-                    <MenuItem
-                      key={name}
-                      onClick={Util.prevDefault(() => this.showLogs(container))}
-                      className="flex align-center"
-                    >
-                      {brick}
-                      <span>{name}</span>
-                    </MenuItem>
-                  );
-                })
-              }
+                return (
+                  <MenuItem
+                    key={name}
+                    onClick={Util.prevDefault(() => this.showLogs(container))}
+                    className="flex align-center"
+                  >
+                    {brick}
+                    <span>{name}</span>
+                  </MenuItem>
+                );
+              })}
             </SubMenu>
           </>
         )}

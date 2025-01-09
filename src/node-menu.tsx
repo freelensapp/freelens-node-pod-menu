@@ -18,9 +18,7 @@ const {
   },
   Navigation,
 } = Renderer;
-const {
-  App,
-} = Common;
+const { App } = Common;
 
 export function NodeMenu(props: Renderer.Component.KubeObjectMenuProps<Node>) {
   const { object: node, toolbar } = props;
@@ -65,8 +63,7 @@ export function NodeMenu(props: Renderer.Component.KubeObjectMenuProps<Node>) {
       message: (
         <p>
           {"Are you sure you want to drain "}
-          <b>{nodeName}</b>
-          ?
+          <b>{nodeName}</b>?
         </p>
       ),
     });
@@ -82,29 +79,25 @@ export function NodeMenu(props: Renderer.Component.KubeObjectMenuProps<Node>) {
         />
         <span className="title">Shell</span>
       </MenuItem>
-      {
-        node.isUnschedulable()
-          ? (
-            <MenuItem onClick={unCordon}>
-              <Icon
-                material="play_circle_filled"
-                tooltip={toolbar && "Uncordon"}
-                interactive={toolbar}
-              />
-              <span className="title">Uncordon</span>
-            </MenuItem>
-          )
-          : (
-            <MenuItem onClick={cordon}>
-              <Icon
-                material="pause_circle_filled"
-                tooltip={toolbar && "Cordon"}
-                interactive={toolbar}
-              />
-              <span className="title">Cordon</span>
-            </MenuItem>
-          )
-      }
+      {node.isUnschedulable() ? (
+        <MenuItem onClick={unCordon}>
+          <Icon
+            material="play_circle_filled"
+            tooltip={toolbar && "Uncordon"}
+            interactive={toolbar}
+          />
+          <span className="title">Uncordon</span>
+        </MenuItem>
+      ) : (
+        <MenuItem onClick={cordon}>
+          <Icon
+            material="pause_circle_filled"
+            tooltip={toolbar && "Cordon"}
+            interactive={toolbar}
+          />
+          <span className="title">Cordon</span>
+        </MenuItem>
+      )}
       <MenuItem onClick={drain}>
         <Icon
           material="delete_sweep"
