@@ -12,13 +12,15 @@ permissions:
 
 jobs:
   create-tag:
+    name: tag
+
+    runs-on: ubuntu-24.04
+    environment: automated
+
     if: >
       startsWith(github.event.issue.title, 'Automated npm version') &&
       github.event.issue.state == 'closed' &&
       github.event.comment.body == '/tag'
-
-    runs-on: ubuntu-24.04
-    environment: automated
 
     steps:
       - name: Checkout
@@ -42,9 +44,11 @@ jobs:
               repo: context.repo.repo,
               ref: 'heads/main',
             });
-            await github.rest.git.createRef({
+            const result = await github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: 'refs/tags/v${{ steps.package-json.outputs.version }}',
               sha: mainRef.data.object.sha,
-            })
+            });
+            console.log(result);
+          github-token: ${{ secrets.GH_TOKEN }}
