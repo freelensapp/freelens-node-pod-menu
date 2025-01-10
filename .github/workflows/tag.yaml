@@ -4,6 +4,11 @@ on:
   issue_comment:
     types:
       - created
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 permissions:
   contents: write
@@ -18,9 +23,11 @@ jobs:
     environment: automated
 
     if: >
-      startsWith(github.event.issue.title, 'Automated npm version') &&
+      (startsWith(github.event.issue.title, 'Automated npm version') &&
       github.event.issue.state == 'closed' &&
-      github.event.comment.body == '/tag'
+      github.event.comment.body == '/tag') ||
+      (startsWith(github.event.pull_request.title, 'Automated npm version') &&
+      github.event.pull_request.merged)
 
     steps:
       - name: Checkout
