@@ -35,4 +35,8 @@ The tarball for the extension will be placed in the current directory. In Freele
 
 ## License
 
-Like the FreeLens repository itself at the point from which this extension is based upon, the content of this repository is released under the MIT license. See the file `LICENSE` for details.
+Copyright (c) 2024-2025 Freelens Authors.
+
+Copyright (c) 2022 OpenLens Authors.
+
+[MIT License](https://opensource.org/licenses/MIT)
