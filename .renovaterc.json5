@@ -14,12 +14,21 @@
     "ubuntu"
   ],
   "packageRules": [
-    // ignore all NPM dependencies as we are not yet ready for upgrading them
+    // ignore all NPM dependencies except @freelensapp/extensions
     {
       "matchManagers": [
         "npm"
       ],
       "enabled": false
+    },
+    {
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "@freelensapp/extensions"
+      ],
+      "enabled": true
     }
   ],
   "customManagers": [
