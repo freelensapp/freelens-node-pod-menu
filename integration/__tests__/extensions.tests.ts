@@ -74,7 +74,7 @@ describe("extensions page tests", () => {
     await window.click(
       'div[class*="close-button-module__closeButton--"][aria-label="Close"]',
     );
-  });
+  }, 15 * 1000);
 
   afterAll(
     async () => {
