@@ -1,7 +1,7 @@
 {
   "name": "@freelensapp/freelens-node-pod-menu",
-  "version": "0.1.4",
-  "description": "Node and pod menus for FreeLens",
+  "version": "0.2.0",
+  "description": "Node and pod menus for FreeLens (deprecated)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/freelensapp/freelens-node-pod-menu.git",

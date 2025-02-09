@@ -8,17 +8,11 @@
 
 <!-- markdownlint-enable MD013 -->
 
-This Freelens extension adds back the node and pod menu functionality.
+Warning! This extension is deprecated.
 
-## Installing this extension
+This Freelens extension added back the node and pod menu functionality.
 
-In Freelens, navigate to the Extensions list. In the text box, enter the name
-of this plugin:
-
-`@freelensapp/freelens-node-pod-menu`
-
-Click "Install", and after a few moments, the plugin should appear in the
-list of installed extensions and be enabled.
+Currently this is an empty package that does not provide any functionlity.
 
 ## How to build this extension locally
 
