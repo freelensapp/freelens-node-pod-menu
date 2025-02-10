@@ -3,12 +3,7 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-import type {
-  ConsoleMessage,
-  ElectronApplication,
-  Frame,
-  Page,
-} from "playwright";
+import type { ConsoleMessage, ElectronApplication, Page } from "playwright";
 import { expect } from "@jest/globals";
 import * as utils from "../helpers/utils";
 
