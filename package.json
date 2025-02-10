@@ -1,7 +1,7 @@
 {
   "name": "@freelensapp/freelens-node-pod-menu",
-  "version": "0.1.4",
-  "description": "Node and pod menus for FreeLens",
+  "version": "0.2.0",
+  "description": "Node and pod menus for FreeLens (deprecated)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/freelensapp/freelens-node-pod-menu.git",
@@ -10,7 +10,7 @@
   "renderer": "dist/renderer.js",
   "engines": {
     "node": ">= 16.14.2",
-    "freelens": "^0.1.0"
+    "freelens": "^0.1.4"
   },
   "copyright": "© 2024-2025 Freelens Authors",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "dist/**/*"
   ],
   "devDependencies": {
-    "@freelensapp/extensions": "^0.1.0",
+    "@freelensapp/extensions": "^0.1.4",
     "@types/node": "16.18.32",
     "@types/react": "17.0.59",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
