@@ -14,9 +14,6 @@
 
 /.nyc_output/
 
-/package-lock.json
-/yarn.lock
-
 .DS_Store
 /.idea
 /.vscode
