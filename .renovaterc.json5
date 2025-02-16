@@ -40,7 +40,7 @@
         "^package\\.json$"
       ],
       "matchStrings": [
-        "\\\"freelens\\\":\\s\\\"^v(?<currentValue>\\S+)$\\\""
+        "\"freelens\"\\s*:\\s*\"^(?<currentValue>\\S+)\""
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "freelensapp/freelens",
