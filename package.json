@@ -10,7 +10,7 @@
   "renderer": "dist/renderer.js",
   "engines": {
     "node": ">= 16.14.2",
-    "freelens": "^0.1.4"
+    "freelens": "^1.0.0"
   },
   "copyright": "© 2024-2025 Freelens Authors",
   "license": "MIT",
