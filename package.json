@@ -34,7 +34,7 @@
   ],
   "devDependencies": {
     "@freelensapp/extensions": "^1.0.0",
-    "@types/node": "16.18.32",
+    "@types/node": "16.18.126",
     "@types/react": "17.0.59",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "eslint": "^8.31.0",
