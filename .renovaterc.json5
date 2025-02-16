@@ -14,25 +14,41 @@
     "ubuntu"
   ],
   "packageRules": [
-    // ignore all NPM dependencies except @freelensapp/extensions
+    // major updates only
     {
-      "matchManagers": [
-        "npm"
-      ],
-      "enabled": false
-    },
-    {
+      "groupName": "freelens",
       "matchManagers": [
         "npm"
       ],
       "matchPackageNames": [
         "@freelensapp/extensions"
       ],
-      "enabled": true
+      "matchUpdateTypes": [
+        "major"
+      ]
+    },
+    {
+      "groupName": "freelens",
+      "matchDepNames": [
+        "freelensapp/freelens"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ]
+    },
+    // non-major updates only
+    {
+      "matchDepNames": [
+        "@types/node"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
     }
   ],
   "customManagers": [
-    // renovate hints after comment
+    // additional engine field in package.json
     {
       "customType": "regex",
       "extractVersionTemplate": "^(?<version>.*)$",
@@ -40,7 +56,7 @@
         "^package\\.json$"
       ],
       "matchStrings": [
-        "\"freelens\"\\s*:\\s*\"^(?<currentValue>\\S+)\""
+        "\"freelens\"\\s*:\\s*\"\\^(?<currentValue>\\S+)\""
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "freelensapp/freelens",
