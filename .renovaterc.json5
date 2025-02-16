@@ -35,6 +35,20 @@
     // renovate hints after comment
     {
       "customType": "regex",
+      "extractVersionTemplate": "^(?<version>.*)$",
+      "fileMatch": [
+        "^package\\.json$"
+      ],
+      "matchStrings": [
+        "\\\"freelens\\\":\\s\\\"^v(?<currentValue>\\S+)$\\\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "freelensapp/freelens",
+      "versioningTemplate": "semver"
+    },
+    // renovate hints after comment
+    {
+      "customType": "regex",
       "extractVersionTemplate": "^v?(?<version>.*)$",
       "fileMatch": [
         "^\\.github/workflows/.*\\.ya?ml$",
