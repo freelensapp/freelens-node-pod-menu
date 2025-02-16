@@ -36,7 +36,7 @@
     "@freelensapp/extensions": "^1.0.0",
     "@types/node": "16.18.126",
     "@types/react": "19.0.9",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
     "eslint": "^8.31.0",
     "ts-loader": "^9.4.2",
     "typescript": "5.7.3",
