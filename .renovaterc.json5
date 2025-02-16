@@ -51,16 +51,16 @@
     // additional engine field in package.json
     {
       "customType": "regex",
-      "extractVersionTemplate": "^(?<version>.*)$",
+      "extractVersionTemplate": "^(^??<version>.*)$",
       "fileMatch": [
         "^package\\.json$"
       ],
       "matchStrings": [
-        "\"freelens\"\\s*:\\s*\"\\^(?<currentValue>\\S+)\""
+        "\"freelens\"\\s*:\\s*\"(?<currentValue>\\S+)\""
       ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "freelensapp/freelens",
-      "versioningTemplate": "semver"
+      "versioningTemplate": "npm"
     },
     // renovate hints after comment
     {
