@@ -22,8 +22,8 @@ lint:
     - git-diff-check
     - markdownlint@0.44.0
     - prettier@3.5.1
-    - renovate@39.170.1
-    - trufflehog@3.88.8
+    - renovate@39.173.1
+    - trufflehog@3.88.9
     - yamllint@1.35.1
   disabled:
     - checkov
