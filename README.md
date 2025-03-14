@@ -10,7 +10,7 @@
 
 <!-- markdownlint-enable MD013 -->
 
-Warning! This extension is deprecated.
+**Warning! This extension is deprecated.**
 
 This Freelens extension added back the node and pod menu functionality.
 
@@ -42,7 +42,7 @@ of enabled extensions.
 ## License
 
 This repository is a fork of
-[openlens-node-pod-menu](https://github.com/freelensapp/freelens/tree/master),
+[openlens-node-pod-menu](https://github.com/alebcay/openlens-node-pod-menu),
 with the aim of carrying forward a version of it for
 [Freelens](https://github.com/freelensapp/freelens).
 
