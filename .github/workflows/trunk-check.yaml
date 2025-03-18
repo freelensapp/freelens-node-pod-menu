@@ -2,8 +2,9 @@ name: Trunk Check
 
 on:
   push:
-    branches:
-      - "**"
+    branches-ignore:
+      - automated/*
+      - renovate/*
   pull_request:
     branches:
       - main
@@ -16,7 +17,7 @@ jobs:
   trunk:
     name: Trunk Check
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout

@@ -2,8 +2,9 @@ name: Integration tests
 
 on:
   push:
-    branches:
-      - "**"
+    branches-ignore:
+      - automated/*
+      - renovate/*
   pull_request:
     branches:
       - main
@@ -11,6 +12,9 @@ on:
 
 permissions:
   contents: read
+
+env:
+  minikube_version: 1.35.0 # datasource=github-releases depName=kubernetes/minikube
 
 jobs:
   test-integration:
@@ -20,7 +24,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             arch: x64
 
     runs-on: ${{ matrix.os }}
@@ -95,10 +99,18 @@ jobs:
           rm -f ../freelens/freelens/integration/__tests__/*
           cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
-      - name: Install minikube
-        uses: medyagh/setup-minikube@master
+      - name: Get Kubernetes version (Linux)
+        if: runner.os == 'Linux'
+        run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
+
+      - name: Install minikube (Linux)
+        if: runner.os == 'Linux'
+        uses: manusa/actions-setup-minikube@v2.13.1
         with:
-          kubernetes-version: v1.30.1
+          minikube version: v${{ env.minikube_version }}
+          kubernetes version: v${{ env.kubernetes_version }}
+          github token: ${{ secrets.GITHUB_TOKEN }}
+          driver: docker
 
       - name: Build Electron app
         run: cd ../freelens && npm run build:app -- -- -- dir --${{ matrix.arch }}
