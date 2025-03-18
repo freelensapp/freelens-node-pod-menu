@@ -1,37 +1,42 @@
-name: Automated trunk upgrade
+name: Automated npm audit
 
 on:
   issue_comment:
     types:
       - created
-  push:
-    branches:
-      - main
-    paths:
-      - .trunk/**
   schedule:
-    - cron: 11 5 * * *
+    - cron: 16 7 * * *
   workflow_dispatch: {}
 
 permissions:
   contents: write
+  id-token: write
   pull-requests: write
 
 jobs:
-  trunk-upgrade:
-    name: trunk upgrade
+  npm-audit:
+    name: npm audit
 
-    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            arch: x64
+
+    runs-on: ${{ matrix.os }}
     environment: automated
+    timeout-minutes: 10
 
     if: >-
       github.event_name != 'issue_comment' ||
-      contains(github.event.comment.body, '/rerun')
+      (startsWith(github.event.issue.title, 'Automated npm audit') && contains(github.event.comment.body, '/rerun'))
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup node
@@ -42,29 +47,28 @@ jobs:
       - name: Get npm cache directory
         run: echo "npm_cache_dir=$(npm config get cache)" >> ${GITHUB_ENV}
 
-      - name: Use cache
+      - name: Use npm cache
         uses: actions/cache@v4
         with:
           path: ${{ env.npm_cache_dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ matrix.os }}-${{ matrix.arch }}-node-
 
-      - name: Install dependencies for plugin
+      - name: Install npm dependencies
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 5
+          timeout_minutes: 20
           max_attempts: 3
-          retry_on: error
+          retry_on: any
           command: npm ci
 
-      - name: Set up Trunk
-        run: curl https://get.trunk.io -fsSL | bash -s -- -y
-
-      - name: Trunk upgrade
+      - name: Run npm audit
         run: |
-          trunk upgrade --yes-to-all --no-progress --ci --color | tee .github/update.log
-          sed -e '/Downloading Trunk/,/Unpacking Trunk... done/d' -e 's/\x1b\[[0-9;]*m//g' -e 's/^\(  \)\{0,1\}  /\1- /' .github/update.log > .github/pr_body.log
+          npm audit report --loglevel error 2>&1 | tee .github/report.log || true
+          npm audit fix --no-fund --loglevel error 2>&1 | tee .github/fix.log || true
+          sed -e 's/\x1b\[[0-9;]*m//g' .github/report.log > .github/pr_body.log
+          sed -e 's/\x1b\[[0-9;]*m//g' -e '/^# npm audit report/,$d' .github/fix.log >> .github/pr_body.log
 
       - name: Check for changes
         run: |
@@ -74,23 +78,15 @@ jobs:
             echo "changes=true" >> $GITHUB_ENV
           fi
 
-      - name: Trunk Check
-        if: env.changes == 'true'
-        uses: trunk-io/trunk-action@v1
-        with:
-          check-mode: all
-        continue-on-error: true
-
       - name: Commit and push to branch
         if: env.changes == 'true'
         uses: EndBug/add-and-commit@v9
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           default_author: github_actions
-          message: Automated trunk upgrade [skip ci]
-          new_branch: automated/trunk-upgrade
-          fetch: false
-          push: origin automated/trunk-upgrade --set-upstream --force
+          message: Automated npm audit
+          new_branch: automated/npm-audit
+          push: origin automated/npm-audit --set-upstream --force
 
       - name: Create pull request
         id: pr
@@ -100,8 +96,8 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
           target_branch: main
           label: automated
-          title: Automated trunk upgrade [skip ci]
-          get_diff: false
+          title: Automated npm audit
+          get_diff: true
 
       - name: Update pull request description
         if: env.changes == 'true'
@@ -111,6 +107,6 @@ jobs:
 
       - name: Close pull request
         if: env.changes == 'false'
-        run: gh pr list --head automated/trunk-upgrade --json number --jq '.[].number' | xargs -rn1 gh pr close --delete-branch
+        run: gh pr list --head automated/npm-audit --json number --jq '.[].number' | xargs -rn1 gh pr close --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
