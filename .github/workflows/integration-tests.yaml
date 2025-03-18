@@ -101,7 +101,7 @@ jobs:
 
       - name: Get Kubernetes version (Linux)
         if: runner.os == 'Linux'
-        run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/package.json)" >> $GITHUB_ENV
+        run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
 
       - name: Install minikube (Linux)
         if: runner.os == 'Linux'
