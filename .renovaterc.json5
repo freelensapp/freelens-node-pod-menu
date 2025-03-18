@@ -7,6 +7,12 @@
   "addLabels": [
     "renovate"
   ],
+  "osvVulnerabilityAlerts": true,
+  "postUpdateOptions": [
+    "npmDedupe"
+  ],
+  // always bump depdenencies even when are in the range
+  "rangeStrategy": "bump",
   "ignoreDeps": [
     // it must be the same as bundled in Electron
     "node",
@@ -14,32 +20,20 @@
     "ubuntu"
   ],
   "packageRules": [
-    // major updates only
+    // peerDependencies are widen
     {
-      "groupName": "freelens",
-      "matchManagers": [
-        "npm"
+      "matchDepTypes": [
+        "peerDependencies"
       ],
-      "matchPackageNames": [
-        "@freelensapp/extensions"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ]
-    },
-    {
-      "groupName": "freelens",
-      "matchDepNames": [
-        "freelensapp/freelens"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ]
+      "rangeStrategy": "widen",
+      "semanticCommitScope": "peer-deps"
     },
     // non-major updates only
     {
       "matchDepNames": [
-        "@types/node"
+        "@types/node",
+        "electron",
+        "npm"
       ],
       "matchUpdateTypes": [
         "major"
