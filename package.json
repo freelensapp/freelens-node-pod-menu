@@ -33,7 +33,7 @@
     "dist/**/*"
   ],
   "devDependencies": {
-    "@freelensapp/extensions": "^1.1.0",
+    "@freelensapp/extensions": "^1.1.2",
     "@types/node": "^20.17.24",
     "@types/react": "19.0.11",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
